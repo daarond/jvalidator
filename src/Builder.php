@@ -1,10 +1,6 @@
 <?php
-
-/**
- * Schema builder and syntax validator
- */
-
 namespace JValidator;
+
 use \Exception as Exception;
 use JValidator\SchemaSpecV2 as SchemaSpec;
 

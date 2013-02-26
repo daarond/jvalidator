@@ -10,7 +10,7 @@ class SchemaSpecV2 {
 	public static function getAllowedProperties($type) {
 		$allowedProperties = array(
 				"*" => 
-					array("type", "required", "id"),
+					array("type", "required", "id", "value"),
 				"string" => 
 					array("pattern", "minLength", "maxLength", "enum",
 						  "description", "extends", "id", "format"),

@@ -1,6 +1,6 @@
 <?php
-
 namespace JValidator;
+
 use \Exception as Exception;
 
 class SchemaProviderException extends Exception {
