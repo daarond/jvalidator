@@ -5,10 +5,10 @@ require_once("BasicResolver.php");
 
 class SchemaProvider {
 
-	static private $_resolver = \JValidator\BasicResolver;
+	static private $_resolver = '\JValidator\BasicResolver';
 
-	static public function setCustomResolver(IResolver $resolver) {
-		$this->_resolver = $resolver;
+	static public function setCustomResolver($resolver) {
+		self::$_resolver = $resolver;
 	}
 
 	//
@@ -33,7 +33,7 @@ class SchemaProvider {
 
 
 	static public function resolveExtend($extend, $dirname) {
-		$resolver = $this->_resolver;
+		$resolver = self::$_resolver;
 		return $resolver::resolveExtend($extend, $dirname);
 	}
 	// Move to resolver
