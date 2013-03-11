@@ -11,33 +11,10 @@ class SchemaProvider {
 		self::$_resolver = $resolver;
 	}
 
-	//
-	// Move to resolver
-	static public function getBasePath($path) {
-		$basePath = JVALIDATOR_SCHEMA_DIR.dirname($path);
-		return $basePath;
-	}
-
-	static public function getPathParts($path) {
-		$pathParts = explode('/', dirname($path));
-		$pathParts = array_slice($pathParts, 1);
-		array_unshift($pathParts, JVALIDATOR_SCHEMA_DIR);
-		return $pathParts;
-	}
-
-	static public function resolveExtendUrl($basePath, $pathParts, $extend) {
-		$path = self::resolveExtend($basePath, $pathParts, $extend);
-		$cutLen = strlen(JVALIDATOR_SCHEMA_DIR);
-		return substr($path, $cutLen);
-	}
-
-
 	static public function resolveExtend($extend, $dirname) {
 		$resolver = self::$_resolver;
 		return $resolver::resolveExtend($extend, $dirname);
 	}
-	// Move to resolver
-	//
 
 	/**
 	 * Returns completely builded JSON Schema
