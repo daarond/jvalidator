@@ -5,6 +5,12 @@ require_once("BasicResolver.php");
 
 class SchemaProvider {
 
+	static private $_resolver = \JValidator\BasicResolver;
+
+	static public function setCustomResolver(IResolver $resolver) {
+		$this->_resolver = $resolver;
+	}
+
 	//
 	// Move to resolver
 	static public function getBasePath($path) {
@@ -27,7 +33,7 @@ class SchemaProvider {
 
 
 	static public function resolveExtend($extend, $dirname) {
-		return BasicResolver::resolveExtend($extend, $dirname);
+		return $this->_resolver::resolveExtend($extend, $dirname);
 	}
 	// Move to resolver
 	//
