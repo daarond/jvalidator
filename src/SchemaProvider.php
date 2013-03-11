@@ -33,7 +33,8 @@ class SchemaProvider {
 
 
 	static public function resolveExtend($extend, $dirname) {
-		return $this->_resolver::resolveExtend($extend, $dirname);
+		$resolver = $this->_resolver;
+		return $resolver::resolveExtend($extend, $dirname);
 	}
 	// Move to resolver
 	//
