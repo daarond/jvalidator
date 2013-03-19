@@ -23,7 +23,7 @@ class SchemaSpecV2 {
 				"boolean" => 
 					array("description", "extends", "id"),
 				"object" => 
-					array("properties", "additional_properties", 
+					array("properties", "additionalProperties", 
 						  "description", "extends", "id"),
 				"array" => 
 					array("items", "minItems", "maxItems", "description",
