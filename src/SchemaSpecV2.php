@@ -4,7 +4,7 @@ namespace JValidator;
 class SchemaSpecV2 {
 	public static function getAllowedTypes() {
 		return array("string", "number", "integer", "boolean",
-			  "object", "array", "any");
+			  "object", "array", "any", "null");
 	}
 
 	public static function getAllowedProperties($type) {
@@ -30,6 +30,7 @@ class SchemaSpecV2 {
 						  "extends", "id"),
 				"any" => 
 					array("description", "extends", "id", "properties"),
+				"null" => array()
 			);
 		return array_merge($allowedProperties[$type], $allowedProperties["*"]);
 	}

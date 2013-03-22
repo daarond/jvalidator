@@ -26,6 +26,58 @@ class Builder {
 	}
 
 	/**
+	 * Validates property type
+	 * @param string | array $type Single type or array of types
+	 * @throws SchemaBuilderException
+	 */
+	private function validateType($type) {
+		if(is_array($type)) {
+			foreach($type as $t) {
+				$this->validateType($t);
+			}
+		} else {
+			if(!in_array($type, SchemaSpec::getAllowedTypes())) {
+				$msg = sprintf("Property type '%s' is not allowed", $type);
+				throw new schemaBuilderException($msg, SchemaBuilderException::INVALID_TYPE);
+			}
+		}
+	}
+
+	private function validateProperties($type, $props) {
+		if(is_array($type)) {
+			$typesCount = count($type);
+			foreach($props as $name => $data) {
+				$errors = 0;
+				$lastError = null;
+
+				// If schema has more than one type property must validate
+				// for at last one type
+				foreach($type as $t) {	
+					$allowedProps = SchemaSpec::getAllowedProperties($t);
+					if(!in_array($name, $allowedProps)) {
+						$lastError = sprintf("Property '%s' is not allowed for any of types '%s'", 
+									   $name, print_r($type, true));
+						$errors++;
+					}
+				}
+
+				if($errors == $typesCount) {
+					throw new SchemaBuilderException($lastError, SchemaBuilderException::INVALID_PROPERTY);
+				}
+			}			
+		} else {
+			foreach($props as $name => $data) {
+				$allowedProps = SchemaSpec::getAllowedProperties($type);
+				if(!in_array($name, $allowedProps)) {
+					$msg = sprintf("Property '%s' is not allowed for type '%s'", 
+								   $name, $type);
+					throw new SchemaBuilderException($msg, SchemaBuilderException::INVALID_PROPERTY);		
+				}
+			}
+		}
+	}
+
+	/**
 	 * Validates schema syntax and looks around for extends. Invoked recursively.
 	 * @param stdClass $schema Schema decoded to stdClass
 	 * @return stdClass builded schema
@@ -44,36 +96,20 @@ class Builder {
 		}
 
 		// Validate property type
-		if(!in_array($schema->type, SchemaSpec::getAllowedTypes())) {
-			$msg = sprintf("Property type '%s' is not allowed", $schema->type);
-			throw new schemaBuilderException($msg, SchemaBuilderException::INVALID_TYPE);
-		}
+		$this->validateType($schema->type);
 
 		// Validate property keys for this property type
-		foreach(get_object_vars($schema) as $name => $data) {
-			$allowedProps = SchemaSpec::getAllowedProperties($schema->type);
-			if(!in_array($name, $allowedProps)) {
-				$msg = sprintf("Property '%s' is not allowed for type '%s'", 
-							   $name, $schema->type);
-				throw new SchemaBuilderException($msg, SchemaBuilderException::INVALID_PROPERTY);		
-			}
-		}
+		$this->validateProperties($schema->type, get_object_vars($schema));
 		
 		// If this property is an object or array process children
-		switch($schema->type) {
-			case 'object':
-				$schema->properties = $this->processObjectProperties($schema);
-				break;
-				
-			case 'array':
-				if(isset($schema->items)) {
-					$schema->items = $this->processArrayItems($schema->items);
-				}
-				break;
-
-			default:
+		if(isset($schema->properties)) {
+			$schema->properties = $this->processObjectProperties($schema);
 		}
 				
+		if(isset($schema->items)) {
+			$schema->items = $this->processArrayItems($schema->items);
+		}
+
 		return $schema;
 	}
 	
