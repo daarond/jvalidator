@@ -7,6 +7,8 @@ require_once 'Constraints/String.php';
 require_once 'Constraints/Number.php';
 require_once 'Constraints/Boolean.php';
 require_once 'Constraints/Integer.php';
+require_once 'Constraints/Null.php';
+require_once 'Constraints/Union.php';
 
 class Validator {
 
@@ -44,7 +46,10 @@ class Validator {
 			return;
 		}
 		self::$resultCode = Validator::VALID;
-		self::check($json, $schema, "$");
+
+		$errors = self::check($json, $schema, "$", array());
+		self::setErrors($errors);
+
 		self::$resultJson = json_encode($json);
 	}
 	
@@ -54,35 +59,44 @@ class Validator {
 	 * @param stdClass $schema Schema for property
 	 * @param string $name Name of currently validating property
 	 */
-	static public function check($json, $schema, $name) {
-		switch($schema->type) {
-			case 'object':
-				$objectConstraint = new Constraint\ObjectConstraint();
-				return $objectConstraint->check($json, $schema, $name);
-				
-			case 'array':
-				$arrayConstraint = new Constraint\ArrayConstraint();
-				return $arrayConstraint->check($json, $schema, $name);
-				
-			case 'string':
-				$stringConstraint = new Constraint\StringConstraint();
-				return $stringConstraint->check($json, $schema, $name);
-				
-			case 'number':
-				$numberConstraint = new Constraint\NumberConstraint();
-				return $numberConstraint->check($json, $schema, $name);
-				
-			case 'boolean':
-				$booleanConstraint = new Constraint\BooleanConstraint();
-				return $booleanConstraint->check($json, $schema, $name);
-				
-			case 'integer':
-				$integerConstraint = new Constraint\IntegerConstraint();
-				return $integerConstraint->check($json, $schema, $name);
-				
-			default:
-				return;
-		}	
+	static public function check($json, $schema, $name, $errors) {
+		if(is_array($schema->type)) {
+			$unionConstraint = new Constraint\UnionConstraint();
+			return $unionConstraint->check($json, $schema, $name, $errors);
+		} else {
+			switch($schema->type) {
+				case 'object':
+					$objectConstraint = new Constraint\ObjectConstraint();
+					return $objectConstraint->check($json, $schema, $name, $errors);
+					
+				case 'array':
+					$arrayConstraint = new Constraint\ArrayConstraint();
+					return $arrayConstraint->check($json, $schema, $name, $errors);
+					
+				case 'string':
+					$stringConstraint = new Constraint\StringConstraint();
+					return $stringConstraint->check($json, $schema, $name, $errors);
+					
+				case 'number':
+					$numberConstraint = new Constraint\NumberConstraint();
+					return $numberConstraint->check($json, $schema, $name, $errors);
+					
+				case 'boolean':
+					$booleanConstraint = new Constraint\BooleanConstraint();
+					return $booleanConstraint->check($json, $schema, $name, $errors);
+					
+				case 'integer':
+					$integerConstraint = new Constraint\IntegerConstraint();
+					return $integerConstraint->check($json, $schema, $name, $errors);
+
+				case 'null':
+					$nullConstraint = new Constraint\NullConstraint();
+					return $nullConstraint->check($json, $schema, $name, $errors);
+					
+				default:
+					return $errors;
+			}
+		}
 	}
 
 	/**
@@ -93,6 +107,13 @@ class Validator {
 	static public function addError($property, $message) {
 		self::$validationErrors[$property] = $message;
 		self::$resultCode = Validator::INVALID;
+	}
+
+	static public function setErrors($errors) {
+		self::$validationErrors = $errors;
+		if(count($errors)) {
+			self::$resultCode = Validator::INVALID;		
+		}
 	}
 
 	/**

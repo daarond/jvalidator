@@ -4,7 +4,7 @@ namespace JValidator\Constraint;
 use JValidator\Validator;
 
 abstract class Constraint {
-	function check($element, $schema, $myName) {
+	function check($element, $schema, $myName, $errors) {
 		
 	}
 }

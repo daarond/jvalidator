@@ -7,10 +7,10 @@ require_once 'Constraint.php';
 
 class ArrayConstraint extends Constraint {
 	
-	function check($element, $schema, $myName) {		
+	function check($element, $schema, $myName, $errors) {
 		if(!is_array($element)) {
-			Validator::addError($myName, 'is not an array');
-			return;
+			$errors[$myName][] = 'is not an array';
+			return $errors;
 		}
 				
 		$itemsSchema = $schema->items;
@@ -28,24 +28,25 @@ class ArrayConstraint extends Constraint {
 		}
 		
 		if(count($element) < $minItems) {
-			Validator::addError($myName, 'must have at last '.$minItems.' items');
-			return;
+			$errors[$myName][] = 'must have at last '.$minItems.' items';
+			return $errors;
 		}
 
 		if(count($element) > $maxItems) {
-			Validator::addError($myName, 'must have at most '.$maxItems.' items');
-			return;
+			$errors[$myName][] = 'must have at most '.$maxItems.' items';
+			return $errors;
 		}
 		
 		$i = 0;
 		foreach($element as $item) {
-			$this->checkArrayItems($item, $itemsSchema, $myName.'.'.$i);
+			$errors = $this->checkArrayItems($item, $itemsSchema, $myName.'.'.$i, $errors);
 			$i++;
-		}		
+		}
+		return $errors;
 	}
 	
-	function checkArrayItems($item, $schema, $myName) {
-		Validator::check($item, $schema, $myName);
+	function checkArrayItems($item, $schema, $myName, $errors) {
+		return Validator::check($item, $schema, $myName, $errors);
 	}
 	
 }

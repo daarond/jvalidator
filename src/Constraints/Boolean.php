@@ -7,9 +7,10 @@ require_once 'Constraint.php';
 
 class BooleanConstraint extends Constraint {
 	
-	function check($element, $schema, $myName) {		
+	function check($element, $schema, $myName, $errors) {
 		if(!is_bool($element)) {
-			Validator::addError($myName, 'must be a boolean');
+			$errors[$myName][] = 'must be a boolean';
 		}
+		return $errors;
 	}	
 }
