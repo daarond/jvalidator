@@ -38,9 +38,6 @@ class ArrayConstraint extends Constraint {
 		}
 		
 		$i = 0;
-		if(is_array($itemsSchema->type)) {
-			var_dump($itemsSchema);
-		}
 		foreach($element as $item) {
 			$errors = $this->checkArrayItems($item, $itemsSchema, $myName.'.'.$i, $errors);
 			$i++;
