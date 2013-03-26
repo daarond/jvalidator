@@ -56,7 +56,7 @@ class Builder {
 					$allowedProps = SchemaSpec::getAllowedProperties($t);
 					if(!in_array($name, $allowedProps)) {
 						$lastError = sprintf("Property '%s' is not allowed for any of types '%s'", 
-									   $name, print_r($type, true));
+									   $name, implode(", ", $type));
 						$errors++;
 					}
 				}
