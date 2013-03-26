@@ -12,11 +12,13 @@ class UnionConstraint extends Constraint {
 			$schema->type = $t;
 			$result = Validator::check($element, $schema, $myName, array());
 			if(!count($result)) {
+				$schema->type = $types;
 				return $errors;
 			}
 			$allResults[$myName][$t] = $result[$myName];
 		}
 
+		$schema->type = $types;
 		return array_merge($errors, $allResults);
 	}
 }
