@@ -27,7 +27,7 @@ class SchemaSpecV2 {
 						  "description", "extends", "id"),
 				"array" => 
 					array("items", "minItems", "maxItems", "description",
-						  "extends", "id"),
+						  "extends", "id", "uniqueItems"),
 				"any" => 
 					array("description", "extends", "id", "properties"),
 				"null" => array()

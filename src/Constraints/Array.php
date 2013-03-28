@@ -36,6 +36,14 @@ class ArrayConstraint extends Constraint {
 			$errors[$myName][] = 'must have at most '.$maxItems.' items';
 			return $errors;
 		}
+
+		if(isset($schema->uniqueItems) && $schema->uniqueItems) {
+			$count1 = count($element);
+			$count2 = count(array_unique($element, SORT_REGULAR));
+			if($count1 != $count2) {
+				$errors[$myName][] = 'items must be unique';
+			}
+		}
 		
 		$i = 0;
 		foreach($element as $item) {
