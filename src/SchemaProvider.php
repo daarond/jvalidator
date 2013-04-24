@@ -21,17 +21,17 @@ class SchemaProvider {
 	 * @param string $fName Schema file name
 	 * @param bool $forceNoCache Don't use cache
 	 * @return string JSON encoded schema
-	 * @throws SchemaProviderException 
+	 * @throws SchemaProviderException
 	 * @throws SchemaBuilderException
 	 */
 	static public function getSchema($fName, $forceNoCache = false) {
 		if(JVALIDATOR_USE_CACHE && !$forceNoCache) {
 			$cached = self::getFromCache($fName);
-			
+
 			if($cached !== false) {
 				return $cached;
 			}
-		} 
+		}
 
 		// Not from cache, so build schema
 		$rawSchema = self::getRawSchema($fName);
@@ -100,7 +100,7 @@ class SchemaProvider {
 		if(!file_exists($cacheFile)) {
 			return false;
 		}
-		
+
 		$schema = file_get_contents($cacheFile);
 		$decoded = json_decode($schema);
 
@@ -119,14 +119,14 @@ class SchemaProvider {
 	 * @param string $fName Schema file name used to compute destination cache key
 	 * @param string $schema JSON encoded schema
 	 * @throws SchemaProviderException when unable to write to cache
-	 */ 
+	 */
 	static private function putToCache($fName, $schema) {
 		$cacheFile = JVALIDATOR_CACHE_DIR . '/' . md5($fName);
 
-		$result = file_put_contents($fName, $schema);
+		$result = file_put_contents($cacheFile, $schema);
 
 		if(is_null($result)) {
-			$msg = sprintf("Unable to write schema '%s' to cache '%s'", 
+			$msg = sprintf("Unable to write schema '%s' to cache '%s'",
 						   $fName, $cacheFile);
 			$code = SchemaProviderException::BROKEN_CACHE;
 			throw new SchemaProviderException($msg, $code);
