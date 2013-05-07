@@ -21,10 +21,16 @@ class ObjectConstraint extends Constraint {
 								   			 $myName.'.'.$name, $errors); 
 		}
 
+		if(!isset($schema->additionalProperties) &&
+		   !JVALIDATOR_ALLOW_ADDITIONAL_FIELDS) {
+
+			$schema->additionalProperties = false;
+		}
+
 		if(isset($schema->additionalProperties) && !$schema->additionalProperties) {
 			foreach(get_object_vars($element) as $name => $details) {
 				if(!array_key_exists($name, $possibleProps)) {
-					$errors[$myName.'.'.$name][] = 'this property does not exists in SCHEMA';
+					$errors[$myName.'.'.$name][] = 'this property is not listed in SCHEMA';
 				}
 			}
 		}
