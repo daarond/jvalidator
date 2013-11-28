@@ -1,14 +1,14 @@
 <?php
-namespace JValidator;
+namespace Brainly\JValidator;
 
-require_once 'Constraints/Object.php';
-require_once 'Constraints/Array.php';
-require_once 'Constraints/String.php';
-require_once 'Constraints/Number.php';
-require_once 'Constraints/Boolean.php';
-require_once 'Constraints/Integer.php';
-require_once 'Constraints/Null.php';
-require_once 'Constraints/Union.php';
+use Brainly\JValidator\Constraints\ObjectConstraint;
+use Brainly\JValidator\Constraints\ArrayConstraint;
+use Brainly\JValidator\Constraints\StringConstraint;
+use Brainly\JValidator\Constraints\NumberConstraint;
+use Brainly\JValidator\Constraints\BooleanConstraint;
+use Brainly\JValidator\Constraints\IntegerConstraint;
+use Brainly\JValidator\Constraints\NullConstraint;
+use Brainly\JValidator\Constraints\UnionConstraint;
 
 class Validator {
 

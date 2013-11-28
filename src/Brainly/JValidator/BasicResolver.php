@@ -1,7 +1,7 @@
 <?php
-namespace JValidator;
+namespace Brainly\JValidator;
 
-require_once("IResolver.php");
+use Brainly\JValidator\IResolver;
 
 class BasicResolver implements IResolver {
 

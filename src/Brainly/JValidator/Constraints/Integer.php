@@ -1,9 +1,9 @@
 <?php
 
-namespace JValidator\Constraint;
-use JValidator\Validator;
+namespace Brainly\JValidator\Constraints;
 
-require_once 'Constraint.php';
+use Brainly\JValidator\Validator;
+use Brainly\JValidator\Constraints\Constraint;
 
 class IntegerConstraint extends Constraint {
 	

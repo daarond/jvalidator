@@ -1,5 +1,5 @@
 <?php
-namespace JValidator;
+namespace Brainly\JValidator;
 
 class SchemaSpecV1 {
 	public static function getAllowedTypes() {

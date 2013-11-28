@@ -1,10 +1,9 @@
 <?php
-namespace JValidator;
+namespace Brainly\JValidator;
 
 use \Exception as Exception;
-use JValidator\SchemaSpecV2 as SchemaSpec;
-
-require_once('SchemaSpecV2.php');
+use Brainly\JValidator\Exceptions;
+use Brainly\JValidator\SchemaSpecV2 as SchemaSpec;
 
 class Builder {	
 	private $dirname;
@@ -38,7 +37,7 @@ class Builder {
 		} else {
 			if(!in_array($type, SchemaSpec::getAllowedTypes())) {
 				$msg = sprintf("Property type '%s' is not allowed", $type);
-				throw new schemaBuilderException($msg, SchemaBuilderException::INVALID_TYPE);
+				throw new SchemaBuilderException($msg, SchemaBuilderException::INVALID_TYPE);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-namespace JValidator;
+namespace Brainly\JValidator;
 
 interface IResolver {
 

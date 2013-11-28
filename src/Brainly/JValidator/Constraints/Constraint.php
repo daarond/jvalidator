@@ -1,7 +1,6 @@
 <?php
 
-namespace JValidator\Constraint;
-use JValidator\Validator;
+namespace Brainly\JValidator\Constraints;
 
 abstract class Constraint {
 	function check($element, $schema, $myName, $errors) {
