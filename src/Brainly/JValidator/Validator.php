@@ -16,11 +16,21 @@ class Validator {
 	const VALID 		= 0;
 	const MODIFIED 		= 1;
 	const INVALID 		= 2;
-	CONST NOT_PERFORMED = 3;
+	const NOT_PERFORMED = 3;
+
+	static private $allowAdditionalFields = false;
 
 	static private $resultCode = Validator::NOT_PERFORMED;
 	static private $validationErrors = array();
 	static private $resultJson = "";
+
+	static public function setAllowAdditionalFields($allow) {
+		self::$allowAdditionalFields = $allow;
+	}
+
+	static public function allowAdditionalFields() {
+		return self::$allowAdditionalFields;
+	}
 
 	/**
 	 * Validates JSON against given schema. Schema should be builded
@@ -66,31 +76,31 @@ class Validator {
 		} else {
 			switch($schema->type) {
 				case 'object':
-					$objectConstraint = new Constraint\ObjectConstraint();
+					$objectConstraint = new ObjectConstraint();
 					return $objectConstraint->check($json, $schema, $name, $errors);
 					
 				case 'array':
-					$arrayConstraint = new Constraint\ArrayConstraint();
+					$arrayConstraint = new ArrayConstraint();
 					return $arrayConstraint->check($json, $schema, $name, $errors);
 					
 				case 'string':
-					$stringConstraint = new Constraint\StringConstraint();
+					$stringConstraint = new StringConstraint();
 					return $stringConstraint->check($json, $schema, $name, $errors);
 					
 				case 'number':
-					$numberConstraint = new Constraint\NumberConstraint();
+					$numberConstraint = new NumberConstraint();
 					return $numberConstraint->check($json, $schema, $name, $errors);
 					
 				case 'boolean':
-					$booleanConstraint = new Constraint\BooleanConstraint();
+					$booleanConstraint = new BooleanConstraint();
 					return $booleanConstraint->check($json, $schema, $name, $errors);
 					
 				case 'integer':
-					$integerConstraint = new Constraint\IntegerConstraint();
+					$integerConstraint = new IntegerConstraint();
 					return $integerConstraint->check($json, $schema, $name, $errors);
 
 				case 'null':
-					$nullConstraint = new Constraint\NullConstraint();
+					$nullConstraint = new NullConstraint();
 					return $nullConstraint->check($json, $schema, $name, $errors);
 					
 				default:

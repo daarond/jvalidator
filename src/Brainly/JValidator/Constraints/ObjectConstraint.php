@@ -22,7 +22,7 @@ class ObjectConstraint extends Constraint {
 		}
 
 		if(!isset($schema->additionalProperties) &&
-		   !JVALIDATOR_ALLOW_ADDITIONAL_FIELDS) {
+		   !Validator::allowAdditionalFields()) {
 
 			$schema->additionalProperties = false;
 		}
