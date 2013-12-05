@@ -71,7 +71,7 @@ class Validator {
 	 */
 	static public function check($json, $schema, $name, $errors) {
 		if(is_array($schema->type)) {
-			$unionConstraint = new Constraint\UnionConstraint();
+			$unionConstraint = new UnionConstraint();
 			return $unionConstraint->check($json, $schema, $name, $errors);
 		} else {
 			switch($schema->type) {
