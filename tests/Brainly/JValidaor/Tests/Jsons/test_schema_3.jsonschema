@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "required": true,
+    "properties": {
+        "string": {
+            "type": "string",
+            "required": true
+        },
+        "common": {
+            "type": "integer",
+            "required": false
+        }
+    }
+}

@@ -23,34 +23,46 @@ use Brainly\JValidator\Exceptions\SchemaProviderException;
  */
 class SchemaProvider
 {
-    private static $useCache  = false;
-    private static $schemaDir = '/schemas';
-    private static $cacheDir  = '/cache';
-    private static $resolver = '\Brainly\JValidator\BasicResolver';
+    private $useCache  = false;
+    private $schemaDir = '/schemas';
+    private $cacheDir  = '/cache';
+    private $resolver = '\Brainly\JValidator\BasicResolver';
 
-    public static function setCustomResolver($resolver)
+    public function __construct(
+        $schemaDir,
+        $useCache = false,
+        $cacheDir = '/cache',
+        $resolver = '\Brainly\JValidator\BasicResolver')
     {
-        self::$resolver = $resolver;
+        $this->schemaDir = $schemaDir;
+        $this->useCache = $useCache;
+        $this->cacheDir = $cacheDir;
+        $this->resolver = $resolver;
     }
 
-    public static function setUseCache($useCache)
+    public function setCustomResolver($resolver)
     {
-        self::$useCache = $useCache;
+        $this->resolver = $resolver;
     }
 
-    public static function setSchemaDir($schemaDir)
+    public function setUseCache($useCache)
     {
-        self::$schemaDir = $schemaDir;
+        $this->useCache = $useCache;
     }
 
-    public static function setCacheDir($cacheDir)
+    public function setSchemaDir($schemaDir)
     {
-        self::$cacheDir = $cacheDir;
+        $this->schemaDir = $schemaDir;
     }
 
-    public static function resolveExtend($extend, $dirname)
+    public function setCacheDir($cacheDir)
     {
-        $resolver = self::$resolver;
+        $this->cacheDir = $cacheDir;
+    }
+
+    public function resolveExtend($extend, $dirname)
+    {
+        $resolver = $this->resolver;
         return $resolver::resolveExtend($extend, $dirname);
     }
 
@@ -62,10 +74,10 @@ class SchemaProvider
      * @throws SchemaProviderException
      * @throws SchemaBuilderException
      */
-    public static function getSchema($fName, $forceNoCache = false)
+    public function getSchema($fName, $forceNoCache = false)
     {
-        if (self::$useCache && !$forceNoCache) {
-            $cached = self::getFromCache($fName);
+        if ($this->useCache && !$forceNoCache) {
+            $cached = $this->getFromCache($fName);
 
             if ($cached !== false) {
                 return $cached;
@@ -73,18 +85,18 @@ class SchemaProvider
         }
 
         // Not from cache, so build schema
-        $rawSchema = self::getRawSchema($fName);
+        $rawSchema = $this->getRawSchema($fName);
         $dirname = dirname($fName);
 
         try {
             $builder = new Builder();
-            $builded = $builder->buildSchema($rawSchema, $dirname);
-        } catch (BuilderException $e) {
+            $builded = $builder->buildSchema($this, $rawSchema, $dirname);
+        } catch (SchemaBuilderException $e) {
             switch ($e->getCode()) {
-                case BuilderException::NO_EXTEND_FILE:
-                case BuilderException::BROKEN_EXTEND:
-                case BuilderException::INVALID_TYPE:
-                case BuilderException::INVALID_PROPERTY:
+                case SchemaBuilderException::NO_EXTEND_FILE:
+                case SchemaBuilderException::BROKEN_EXTEND:
+                case SchemaBuilderException::INVALID_TYPE:
+                case SchemaBuilderException::INVALID_PROPERTY:
                     throw new InvalidSchemaException($e->getMessage());
                     break;
 
@@ -93,8 +105,8 @@ class SchemaProvider
             }
         }
 
-        if (self::$useCache && !$forceNoCache) {
-            self::putToCache($fName, $builded);
+        if ($this->useCache && !$forceNoCache) {
+            $this->putToCache($fName, $builded);
         }
 
         return $builded;
@@ -106,9 +118,9 @@ class SchemaProvider
      * @return string JSON encoded schema
      * @throws SchemaProviderException when schema file doesn't exists or can't be parsed
      */
-    public static function getRawSchema($fName)
+    public function getRawSchema($fName)
     {
-        $fName = self::$schemaDir . '/' . $fName;
+        $fName = $this->schemaDir . '/' . $fName;
 
         if (!file_exists($fName)) {
             $msg = sprintf("Schema file '%s' not found", $fName);
@@ -134,9 +146,9 @@ class SchemaProvider
      * @return false | string JSON encoded schema or false if there is no schema in cache
      * @throws SchemaProviderException when can not decode cached JSON
      */
-    private static function getFromCache($fName)
+    private function getFromCache($fName)
     {
-        $cacheFile = self::$cacheDir . '/' . md5($fName);
+        $cacheFile = $this->cacheDir . '/' . md5($fName);
 
         if (!file_exists($cacheFile)) {
             return false;
@@ -164,9 +176,9 @@ class SchemaProvider
      * @param string $schema JSON encoded schema
      * @throws SchemaProviderException when unable to write to cache
      */
-    private static function putToCache($fName, $schema)
+    private function putToCache($fName, $schema)
     {
-        $cacheFile = self::$cacheDir . '/' . md5($fName);
+        $cacheFile = $this->cacheDir . '/' . md5($fName);
 
         $result = file_put_contents($cacheFile, $schema);
 

@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "required": true,
+    "extends": "missing.jsonschema",
+    "properties": {
+        "boolean": {
+            "type": "boolean",
+            "required": true
+        },
+        "common": {
+            "type": "integer",
+            "required": true
+        }
+    }
+}

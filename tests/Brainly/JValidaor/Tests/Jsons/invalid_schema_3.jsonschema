@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "required": true,
+    "extends": "invalid_schema_1.jsonschema",
+    "properties": {
+        "boolean": {
+            "type": "boolean",
+            "required": true
+        },
+        "common": {
+            "type": "integer",
+            "required": true
+        }
+    }
+}

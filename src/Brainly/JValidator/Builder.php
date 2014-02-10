@@ -12,8 +12,9 @@
 namespace Brainly\JValidator;
 
 use \Exception as Exception;
-use Brainly\JValidator\Exceptions;
+use Brainly\JValidator\Exceptions\SchemaBuilderException;
 use Brainly\JValidator\SchemaSpec;
+use Brainly\JValidator\SchemaProvider;
 
 /**
  * Tool for building schema with extends
@@ -29,12 +30,12 @@ class Builder
      * @return string JSON encoded schema
      * @throws SchemaBuilderException
      */
-    public function buildSchema($schema, $dirname)
+    public function buildSchema(SchemaProvider $provider, $schema, $dirname)
     {
         $schema = json_decode($schema);
         $this->dirname = $dirname;
 
-        $builded = $this->build($schema);
+        $builded = $this->build($provider, $schema);
 
         return json_encode($builded);
     }
@@ -105,11 +106,11 @@ class Builder
      * @return stdClass builded schema
      * @throws SchemaBuilderException
      */
-    private function build($schema)
+    private function build(SchemaProvider $provider, $schema)
     {
         // If encounter 'extends' property fetch given schema properties
         if (isset($schema->extends)) {
-            $schema = $this->extend($schema, $schema->extends);
+            $schema = $this->extend($provider, $schema, $schema->extends);
             unset($schema->extends);
         }
 
@@ -126,11 +127,11 @@ class Builder
         
         // If this property is an object or array process children
         if (isset($schema->properties)) {
-            $schema->properties = $this->processObjectProperties($schema);
+            $schema->properties = $this->processObjectProperties($provider, $schema);
         }
                 
         if (isset($schema->items)) {
-            $schema->items = $this->processArrayItems($schema->items);
+            $schema->items = $this->processArrayItems($provider, $schema->items);
         }
 
         return $schema;
@@ -143,20 +144,20 @@ class Builder
      * @return stdClass Schema merged with extending schema
      * @throws SchemaBuilderException
      */
-    private function extend($schema, $extendSchema)
+    private function extend(SchemaProvider $provider, $schema, $extendSchema)
     {
         // If extending more than one schema
         if (is_array($extendSchema)) {
             foreach ($extendSchema as $extendSchemaItem) {
-                $schema = $this->extend($schema, $extendSchemaItem);
+                $schema = $this->extend($provider, $schema, $extendSchemaItem);
             }
             return $schema;
         }
 
         // Resolve extend path
-        $extendPath = SchemaProvider::resolveExtend($extendSchema, $this->dirname);
+        $extendPath = $provider->resolveExtend($extendSchema, $this->dirname);
 
-        $extend = SchemaProvider::getSchema($extendPath);
+        $extend = $provider->getSchema($extendPath);
         $extend = json_decode($extend);
 
         //
@@ -201,28 +202,28 @@ class Builder
         return $props;
     }
     
-    private function processObjectProperties($schema)
+    private function processObjectProperties(SchemaProvider $provider, $schema)
     {
         $properties = $schema->properties;
                 
         foreach (get_object_vars($properties) as $name => $details) {
-            $newProps = $this->build($details);
+            $newProps = $this->build($provider, $details);
             $properties->$name = $newProps;
         }
         
         return $properties;
     }
     
-    private function processArrayItems($schema)
+    private function processArrayItems(SchemaProvider $provider, $schema)
     {
         if (is_array($schema)) {
             $newSchema = array();
             foreach ($schema as $item) {
-                $newSchema[] = $this->build($item);
+                $newSchema[] = $this->build($provider, $item);
             }
             return $newSchema;
         } else {
-            return $this->build($schema);
+            return $this->build($provider, $schema);
         }
     }
 }

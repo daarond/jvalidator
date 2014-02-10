@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "required": true,
+    "properties": {
+        "boolean": {
+            "type": "boolean",
+            "required": true
+        },
+        "string": {
+            "type": "string",
+            "required": true
+        },
+        "common": {
+            "type": "foo",
+            "required": true
+        }
+    }
+}
