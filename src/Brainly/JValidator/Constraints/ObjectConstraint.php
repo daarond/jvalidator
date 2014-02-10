@@ -17,7 +17,7 @@ use Brainly\JValidator\Constraints\Constraint;
 /**
  * Constraint for validating objects
  */
-class ObjectConstraint extends Constraint
+class ObjectConstraint implements Constraint
 {
     
     /**
@@ -30,7 +30,7 @@ class ObjectConstraint extends Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, mixed $element, object $schema, string $myName, array $errors)
+    public function check(Validator $validator, $element, $schema, $myName, array $errors)
     {
         if (!is_object($element)) {
             $errors[$myName][] = 'must be an object';

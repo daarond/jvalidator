@@ -16,7 +16,7 @@ use Brainly\JValidator\Validator;
 /**
  * Interface for constraint that performs validation.
  */
-interface IConstraint
+interface Constraint
 {
     /**
      * Performs validation of given element.
@@ -28,5 +28,5 @@ interface IConstraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, mixed $element, object $schema, string $myName, array $errors);
+    public function check(Validator $validator, $element, $schema, $myName, array $errors);
 }

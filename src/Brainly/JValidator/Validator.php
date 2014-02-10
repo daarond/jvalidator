@@ -78,7 +78,7 @@ class Validator
         $errors = $this->check($json, $schema, "$", array());
         $this->setErrors($errors);
 
-        $this->$resultJson = json_encode($json);
+        $this->resultJson = json_encode($json);
     }
     
     /**

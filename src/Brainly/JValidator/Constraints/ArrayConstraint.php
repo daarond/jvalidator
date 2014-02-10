@@ -29,7 +29,7 @@ class ArrayConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, mixed $element, object $schema, string $myName, array $errors)
+    public function check(Validator $validator, $element, $schema, $myName, array $errors)
     {
         if (!is_array($element)) {
             $errors[$myName][] = 'is not an array';
