@@ -1,6 +1,8 @@
 # JValidator
-JSON Schema validation library
-- Builds JSON Schemas and checks their syntax.
+[![Build Status](https://travis-ci.org/brainly/jvalidator.png?branch=master)](https://travis-ci.org/brainly/jvalidator)
+
+JSON Schema validation library for draft v3
+- Builds JSON Schemas and checks their syntax
 - Validates JSON's against schemas
 
 ## Basic usage
@@ -42,3 +44,11 @@ Following functions can be used to obtain validation results:
   - `2` - JSON is not valid regarding to schema
   - `3` - validation has not been performed yet
 - `Validator::getValidationErrors()` returns associative array with errors for each property e.g. `Array ("property" => "error message")`
+
+# About
+## Author
+Łukasz Lalik for Brainly - lukasz.lalik@brainly.com - https://twitter.com/LukaszLalik  
+See also the list of [contributors](/contributors) which participated in this project.
+
+## License
+JValidator is licensed under the BSD-3 License - see the `LICENSE` file for details.
