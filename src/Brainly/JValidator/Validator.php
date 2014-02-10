@@ -65,11 +65,11 @@ class Validator
         $json = json_decode($json);
         $schema = json_decode($schema);
 
-        if (!is_object($schema)) {
+        if (is_null($schema)) {
             throw new InvalidSchemaException();
         }
 
-        if (!is_object($json)) {
+        if (is_null($json)) {
             $this->addError('$', 'Is not a valid JSON');
             return;
         }

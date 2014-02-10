@@ -34,4 +34,33 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->validator->getResultCode());
         $this->assertNotEquals([], $this->validator->getValidationErrors());
     }
+
+    public function testValidateValidArray()
+    {
+        $schema = file_get_contents(__DIR__ . '/Jsons/test_schema_5.jsonschema');
+        $json   = file_get_contents(__DIR__ . '/Jsons/valid_json_2.json');
+
+        $this->validator->validate($json, $schema);
+
+        $this->assertEquals(0, $this->validator->getResultCode());
+        $this->assertEquals([], $this->validator->getValidationErrors());
+    }
+
+    public function testValidateInvalidArray()
+    {
+        $schema = file_get_contents(__DIR__ . '/Jsons/test_schema_5.jsonschema');
+        $json   = file_get_contents(__DIR__ . '/Jsons/invalid_json_2.json');
+
+        $this->validator->validate($json, $schema);
+
+        $this->assertEquals(2, $this->validator->getResultCode());
+        $this->assertNotEquals([], $this->validator->getValidationErrors());
+
+        $json   = file_get_contents(__DIR__ . '/Jsons/invalid_json_3.json');
+
+        $this->validator->validate($json, $schema);
+
+        $this->assertEquals(2, $this->validator->getResultCode());
+        $this->assertNotEquals([], $this->validator->getValidationErrors());
+    }
 }
