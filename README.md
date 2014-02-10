@@ -1,42 +1,44 @@
 # JValidator
 [![Build Status](https://travis-ci.org/brainly/jvalidator.png?branch=master)](https://travis-ci.org/brainly/jvalidator)
 
-JSON Schema validation library for draft v3
+JSON Schema validation library for [draft v3](http://tools.ietf.org/search/draft-zyp-json-schema-03)
 - Builds JSON Schemas and checks their syntax
 - Validates JSON's against schemas
 
-## Basic usage
-======
-- Include JValidator in your project
-- Define schemas directory and set cache configuration
-- Build schema
-- Validate!
+# Usage
 
-### Example code
+## JSON validation
 
-    <?php
-    require_once "JValidator.php";
+```
+use Brainly\JValidator\Validator;
 
-    define("JVALIDATOR_SCHEMA_DIR", JVALIDATOR_ROOT_DIR . "/schemas");
-    define("JVALIDATOR_CACHE_DIR",  JVALIDATOR_ROOT_DIR . "/tmp/cache");
-    define("JVALIDATOR_USE_CACHE",  false);
-  
-    try {
-      $schema = JValidator\SchemaProvider::getSchema("test.jsonschema");
-    } catch (JValidator\SchemaProviderException $e) {
-      die("Can not read schema from file. " . $e->getMessage());
-    } catch (JValidator\SchemaBuilderException $e) {
-      die("Invalid schema. " . $e->getMessage());
-    }
+$schema = '{...}';
+$json = '{...}';
 
-    $json = '{"example":true, "int":3, "data":{"items":[]}}';
+$validator = new Validator();
+$validator->validate($json, $schema);
 
-    JValidator\Validator::validate($json, $schema);
+echo "Validation result: " . $validator->getResultCode() . "\n";
+print_r($validator->getValidationErrors());
+```
 
-    echo "Validation result: " . JValidator\Validator::getResultCode() . "\n";
-    print_r(JValidator\Validator::getValidationErrors());
-    
-### Analyzing validation results
+## Schema building
+
+```
+use Brainly\JValidator\SchemaProvider;
+
+$provider = new SchemaProvider(__DIR__ . '/SchemaDir');
+
+try {
+    $schema = $provider->getSchema("test.jsonschema");
+} catch (Brainly\JValidator\SchemaProviderException $e) {
+    die("Can not read schema from file. " . $e->getMessage());
+} catch (Brainly\JValidator\SchemaBuilderException $e) {
+    die("Invalid schema. " . $e->getMessage());
+}
+```
+
+## Analyzing validation results
 Following functions can be used to obtain validation results:
 - `Validator::getResultCode()` returns: 
   - `0` - validation passed
