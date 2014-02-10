@@ -1,10 +1,10 @@
 <?php
 namespace Brainly\JValidator;
 
-class SchemaSpecV1 {
+class SchemaSpec {
 	public static function getAllowedTypes() {
 		return array("string", "number", "integer", "boolean",
-			  "object", "array", "any");
+			  "object", "array", "any", "null");
 	}
 
 	public static function getAllowedProperties($type) {
@@ -13,7 +13,7 @@ class SchemaSpecV1 {
 					array("type", "required", "id", "value"),
 				"string" => 
 					array("pattern", "minLength", "maxLength", "enum",
-						  "description", "extends", "id"),
+						  "description", "extends", "id", "format"),
 				"number" => 
 					array("minimum", "maximum", "enum", "description",
 						  "extends", "id"),
@@ -23,13 +23,14 @@ class SchemaSpecV1 {
 				"boolean" => 
 					array("description", "extends", "id"),
 				"object" => 
-					array("properties", "additional_properties", 
+					array("properties", "additionalProperties", 
 						  "description", "extends", "id"),
 				"array" => 
 					array("items", "minItems", "maxItems", "description",
-						  "extends", "id"),
+						  "extends", "id", "uniqueItems"),
 				"any" => 
-					array("description", "extends", "id"),
+					array("description", "extends", "id", "properties"),
+				"null" => array()
 			);
 		return array_merge($allowedProperties[$type], $allowedProperties["*"]);
 	}

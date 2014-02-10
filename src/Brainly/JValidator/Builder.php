@@ -3,7 +3,7 @@ namespace Brainly\JValidator;
 
 use \Exception as Exception;
 use Brainly\JValidator\Exceptions;
-use Brainly\JValidator\SchemaSpecV2 as SchemaSpec;
+use Brainly\JValidator\SchemaSpec;
 
 class Builder {	
 	private $dirname;
