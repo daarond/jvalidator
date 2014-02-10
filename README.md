@@ -1,4 +1,6 @@
 # JValidator
+[![Build Status](https://travis-ci.org/brainly/jvalidator.png?branch=master)](https://travis-ci.org/brainly/jvalidator)
+
 JSON Schema validation library
 - Builds JSON Schemas and checks their syntax.
 - Validates JSON's against schemas
