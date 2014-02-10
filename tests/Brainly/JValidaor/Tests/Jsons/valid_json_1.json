@@ -1,0 +1,12 @@
+{
+    "integer": 10,
+    "string": "blah blah",
+    "boolean": true,
+    "array": [
+        "item1", "item2"
+    ],
+    "null": null,
+    "number": 123.65,
+    "union1": "blah",
+    "union2": 123
+}

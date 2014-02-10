@@ -1,6 +1,17 @@
 {
     "name": "brainly/jvalidator",
     "version": "2.0.0",
+    "description": "JSON Schema draft v3 PHP implementation",
+    "authors": [
+        {
+            "name": "Łukasz Lalik",
+            "email": "lukasz.lalik@brainly.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "squizlabs/php_codesniffer": "1.4.8"
+    },
     "autoload": {
         "psr-0": { "Brainly\\JValidator\\": "src/" }
     }

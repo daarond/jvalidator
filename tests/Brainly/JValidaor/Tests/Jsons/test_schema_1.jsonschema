@@ -1,0 +1,41 @@
+{
+    "type": "object",
+    "required": true,
+    "properties": {
+        "integer": {
+            "type": "integer",
+            "required": true
+        },
+        "string": {
+            "type": "string",
+            "required": true
+        },
+        "boolean": {
+            "type": "boolean",
+            "required": true
+        },
+        "array": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "required": true
+            }
+        },
+        "null": {
+            "type": "null",
+            "required": true
+        },
+        "number": {
+            "type": "number",
+            "required": true
+        },
+        "union1": {
+            "type": ["string", "integer"],
+            "required": true
+        },
+        "union2": {
+            "type": ["string", "integer"],
+            "required": true
+        }
+    }
+}
