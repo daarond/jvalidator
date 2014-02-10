@@ -1,1 +1,4 @@
 schemas/*
+tmp
+vendor
+composer.lock
