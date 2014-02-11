@@ -1,5 +1,5 @@
 # JValidator
-![Brainly](https://raw.github.com/brainly/jvalidator/master/doc/logo.png)
+![Brainly](/doc/logo.png)
 
 [![Build Status](https://travis-ci.org/brainly/jvalidator.png?branch=master)](https://travis-ci.org/brainly/jvalidator)
 
