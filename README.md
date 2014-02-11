@@ -1,11 +1,13 @@
 # JValidator
+![Brainly](https://raw.github.com/brainly/jvalidator/master/doc/logo.png)
+
 [![Build Status](https://travis-ci.org/brainly/jvalidator.png?branch=master)](https://travis-ci.org/brainly/jvalidator)
 
 JSON Schema validation library for [draft v3](http://tools.ietf.org/search/draft-zyp-json-schema-03)
 - Builds JSON Schemas and checks their syntax
 - Validates JSON's against schemas
 
-![Brainly](https://raw.github.com/brainly/jvalidator/master/doc/logo.png)
+
 
 # Usage
 
