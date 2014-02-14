@@ -1,13 +1,14 @@
 # JValidator
-![Brainly](/doc/logo.png)
-
 [![Build Status](https://travis-ci.org/brainly/jvalidator.png?branch=master)](https://travis-ci.org/brainly/jvalidator)
 
 JSON Schema validation library for [draft v3](http://tools.ietf.org/search/draft-zyp-json-schema-03)
 - Builds JSON Schemas and checks their syntax
 - Validates JSON's against schemas
 
-
+## Implemented features
+- types: `array`, `boolean`, `integer`, `null`, `number`, `object`, `string`, `union`
+- constraints: `type`, `properties`, `additionalProperties`, `items`, `required`, `minimum`, `maximum`, `minItems`, `maxItems`, `uniqueItems`, `pattern`, `minLength`, `maxLength`, `enum`
+- other: `description`, `id`, `extends`
 
 # Usage
 
