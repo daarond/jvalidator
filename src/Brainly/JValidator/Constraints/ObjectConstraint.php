@@ -30,11 +30,16 @@ class ObjectConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors)
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors)
     {
         if (!is_object($element)) {
-            $errors[$myName][] = 'must be an object';
-            return $errors;
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            } else {
+                $errors[$myName][] = 'must be an object';
+                return $errors;
+            }
         }
                 
         $properties = $schema->properties;
@@ -71,14 +76,14 @@ class ObjectConstraint implements Constraint
     /**
      * Validate single property
      */
-    private function checkProperties(Validator $validator, $object, $name, $details, $myName, $errors)
+    private function checkProperties(Validator $validator, &$object, $name, $details, $myName, $errors)
     {
         $hasProperty = property_exists($object, $name);
         $required = isset($details->required) && $details->required;
         
         if ($hasProperty) {
             $errors = $validator->check($object->$name, $details, $myName, $errors);
-        } elseif (!$hasProperty && $required) {
+        } else if (!$hasProperty && $required) {
             $errors[$myName][] = 'is not defined';
         }
         return $errors;

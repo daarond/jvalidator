@@ -28,5 +28,5 @@ interface Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors);
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors);
 }

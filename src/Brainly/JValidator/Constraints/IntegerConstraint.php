@@ -29,26 +29,53 @@ class IntegerConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors)
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors)
     {
         if (!is_int($element)) {
-            $errors[$myName][] = 'must be an integer';
-            return $errors;
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            } else {
+                $errors[$myName][] = 'must be an integer';
+                return $errors;
+            }
         }
         
         if (isset($schema->minimum)) {
             if ($element < $schema->minimum) {
+                if ($validator->coerce && isset($schema->default)) {
+                    $element = $schema->default;
+                    return $errors;
+                }
+                if ($validator->coerce) {
+                    $element = $schema->minimum;
+                    return $errors;
+                }
                 $errors[$myName][] = 'must be greater than '.$schema->minimum;
             }
         }
         
         if (isset($schema->maximum)) {
             if ($element > $schema->maximum) {
+                if ($validator->coerce && isset($schema->default)) {
+                    $element = $schema->default;
+                    return $errors;
+                }
+                if ($validator->coerce) {
+                    $element = $schema->maximum;
+                    return $errors;
+                }
                 $errors[$myName][] = 'must be less than '.$schema->maximum;
             }
         }
         
         if (isset($schema->enum) && !in_array($element, $schema->enum)) {
+
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            }
+
             $errors[$myName][] = 'must have one of the given values: '.join(', ', $schema->enum);
         }
 

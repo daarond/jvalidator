@@ -30,9 +30,13 @@ class BooleanConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors)
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors)
     {
         if (!is_bool($element)) {
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            }
             $errors[$myName][] = 'must be a boolean';
         }
         return $errors;

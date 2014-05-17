@@ -34,9 +34,11 @@ class Validator
 
     private $allowAdditionalFields = false;
 
-    private $resultCode = Validator::NOT_PERFORMED;
+    public $resultCode = Validator::NOT_PERFORMED;
     private $validationErrors = array();
     private $resultJson = "";
+    public $resultObject;
+    public $coerce;
 
     public function setAllowAdditionalFields($allow)
     {
@@ -78,6 +80,7 @@ class Validator
         $errors = $this->check($json, $schema, "$", array());
         $this->setErrors($errors);
 
+        $this->resultObject = $json;
         $this->resultJson = json_encode($json);
     }
     
@@ -88,45 +91,23 @@ class Validator
      * @param stdClass $schema Schema for property
      * @param string $name Name of currently validating property
      */
-    public function check($json, $schema, $name, $errors)
+    public function check(&$json, $schema, $name, $errors)
     {
         if (is_array($schema->type)) {
-            $unionConstraint = new UnionConstraint();
-            return $unionConstraint->check($this, $json, $schema, $name, $errors);
+            $constraint = new UnionConstraint();
         } else {
             switch ($schema->type) {
-                case 'object':
-                    $objectConstraint = new ObjectConstraint();
-                    return $objectConstraint->check($this, $json, $schema, $name, $errors);
-                    
-                case 'array':
-                    $arrayConstraint = new ArrayConstraint();
-                    return $arrayConstraint->check($this, $json, $schema, $name, $errors);
-                    
-                case 'string':
-                    $stringConstraint = new StringConstraint();
-                    return $stringConstraint->check($this, $json, $schema, $name, $errors);
-                    
-                case 'number':
-                    $numberConstraint = new NumberConstraint();
-                    return $numberConstraint->check($this, $json, $schema, $name, $errors);
-                    
-                case 'boolean':
-                    $booleanConstraint = new BooleanConstraint();
-                    return $booleanConstraint->check($this, $json, $schema, $name, $errors);
-                    
-                case 'integer':
-                    $integerConstraint = new IntegerConstraint();
-                    return $integerConstraint->check($this, $json, $schema, $name, $errors);
-
-                case 'null':
-                    $nullConstraint = new NullConstraint();
-                    return $nullConstraint->check($this, $json, $schema, $name, $errors);
-                    
-                default:
-                    return $errors;
+                case 'object':  $constraint = new ObjectConstraint();   break;
+                case 'array':   $constraint = new ArrayConstraint();    break;
+                case 'string':  $constraint = new StringConstraint();   break;
+                case 'number':  $constraint = new NumberConstraint();   break;
+                case 'boolean': $constraint = new BooleanConstraint();  break;
+                case 'integer': $constraint = new IntegerConstraint();  break;
+                case 'null':    $constraint = new NullConstraint();     break;
+                default: return $errors;
             }
         }
+        return $constraint->check($this, $json, $schema, $name, $errors);
     }
 
     /**

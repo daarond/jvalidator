@@ -47,7 +47,8 @@ class SchemaSpec
                     "description",
                     "extends",
                     "id",
-                    "format"
+                    "format",
+                    "default"
                 ],
                 "number" => [
                     "minimum",
@@ -55,7 +56,8 @@ class SchemaSpec
                     "enum",
                     "description",
                     "extends",
-                    "id"
+                    "id",
+                    "default"
                 ],
                 "integer" => [
                     "minimum",
@@ -63,19 +65,22 @@ class SchemaSpec
                     "enum",
                     "description",
                     "extends",
-                    "id"
+                    "id",
+                    "default"
                 ],
                 "boolean" => [
                     "description",
                     "extends",
-                    "id"
+                    "id",
+                    "default"
                 ],
                 "object" => [
                     "properties",
                     "additionalProperties",
                     "description",
                     "extends",
-                    "id"
+                    "id",
+                    "default"
                 ],
                 "array" => [
                     "items",
@@ -84,7 +89,8 @@ class SchemaSpec
                     "description",
                     "extends",
                     "id",
-                    "uniqueItems"
+                    "uniqueItems",
+                    "default"
                 ],
                 "any" => [
                     "description",

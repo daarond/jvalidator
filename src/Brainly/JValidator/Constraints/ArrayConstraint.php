@@ -29,11 +29,17 @@ class ArrayConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors)
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors)
     {
         if (!is_array($element)) {
-            $errors[$myName][] = 'is not an array';
-            return $errors;
+            if ($validator->coerce && isset($schema->items) && isset($schema->items->default)) {
+                $element = $schema->items->default;
+                $validator->resultCode = Validator::MODIFIED;
+                return $errors;
+            } else {
+                $errors[$myName][] = 'is not an array';
+                return $errors;
+            }
         }
                 
         $itemsSchema = $schema->items;
@@ -51,11 +57,21 @@ class ArrayConstraint implements Constraint
         }
         
         if (count($element) < $minItems) {
-            $errors[$myName][] = 'must have at last '.$minItems.' items';
+            if ($validator->coerce && isset($schema->items) && isset($schema->items->default)) {
+                $element = $schema->items->default;
+                $validator->resultCode = Validator::MODIFIED;
+                return $errors;
+            }
+            $errors[$myName][] = 'must have at least '.$minItems.' items';
             return $errors;
         }
 
         if (count($element) > $maxItems) {
+            if ($validator->coerce) {
+                $element = array_slice($element, 0, $maxItems);
+                $validator->resultCode = Validator::MODIFIED;
+                return $errors;
+            }
             $errors[$myName][] = 'must have at most '.$maxItems.' items';
             return $errors;
         }
@@ -63,8 +79,12 @@ class ArrayConstraint implements Constraint
         if (isset($schema->uniqueItems) && $schema->uniqueItems) {
             $count1 = count($element);
             $count2 = count(array_unique($element, SORT_REGULAR));
+
             if ($count1 != $count2) {
-                $errors[$myName][] = 'items must be unique';
+                if ($validator->coerce){
+                    $element = array_unique($element, SORT_REGULAR);
+                    $validator->resultCode = Validator::MODIFIED;
+                } else $errors[$myName][] = 'items must be unique';
             }
         }
         
@@ -79,7 +99,7 @@ class ArrayConstraint implements Constraint
     /**
      * Validate single element from array
      */
-    private function checkArrayItems(Validator $validator, $item, $schema, $myName, $errors)
+    private function checkArrayItems(Validator $validator, &$item, $schema, $myName, $errors)
     {
         return $validator->check($item, $schema, $myName, $errors);
     }

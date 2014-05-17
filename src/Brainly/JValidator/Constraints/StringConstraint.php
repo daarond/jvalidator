@@ -29,26 +29,55 @@ class StringConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors)
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors)
     {
         if (!is_string($element)) {
-            $errors[$myName][] = 'must be a string';
-            return $errors;
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            } else {
+                $errors[$myName][] = 'must be a string';
+                return $errors;
+            }
         }
 
         if (isset($schema->pattern) && !preg_match('/' . $schema->pattern . '/', $element)) {
+
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            }
+
             $errors[$myName][] = 'does not match the regex pattern '.$schema->pattern;
         }
         
         if (isset($schema->maxLength) && strlen($element) > $schema->maxLength) {
+
+            if ($validator->coerce){
+                $element = substr($element, 0, $schema->maxLength);
+                return $errors;
+            }
+
             $errors[$myName][] = 'must be at most '.$schema->maxLength.' characters long';
         }
         
         if (isset($schema->minLength) && strlen($element) < $schema->minLength) {
-            $errors[$myName][] = 'must be at last '.$schema->minLength.' characters long';
+
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            }
+
+            $errors[$myName][] = 'must be at least '.$schema->minLength.' characters long';
         }
         
         if (isset($schema->enum) && !in_array($element, $schema->enum)) {
+
+            if ($validator->coerce && isset($schema->default)) {
+                $element = $schema->default;
+                return $errors;
+            }
+
             $errors[$myName][] = 'must have one of the given values: '.join(', ', $schema->enum);
         }
 

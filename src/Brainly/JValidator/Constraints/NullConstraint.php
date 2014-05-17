@@ -29,9 +29,15 @@ class NullConstraint implements Constraint
      * @param array     $errors     Array of currently gathered errors
      * @return array    Currently gathered errors
      */
-    public function check(Validator $validator, $element, $schema, $myName, array $errors)
+    public function check(Validator $validator, &$element, $schema, $myName, array $errors)
     {
         if (!is_null($element)) {
+
+            if ($validator->coerce) {
+                $element = null;
+                return $errors;
+            }
+
             $errors[$myName][] = 'must be null';
         }
         return $errors;
