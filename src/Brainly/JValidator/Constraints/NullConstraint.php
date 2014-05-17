@@ -35,6 +35,7 @@ class NullConstraint implements Constraint
 
             if ($validator->coerce) {
                 $element = null;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 

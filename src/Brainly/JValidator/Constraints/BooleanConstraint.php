@@ -35,6 +35,7 @@ class BooleanConstraint implements Constraint
         if (!is_bool($element)) {
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
             $errors[$myName][] = 'must be a boolean';

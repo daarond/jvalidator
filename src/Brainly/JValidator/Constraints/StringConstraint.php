@@ -34,6 +34,7 @@ class StringConstraint implements Constraint
         if (!is_string($element)) {
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             } else {
                 $errors[$myName][] = 'must be a string';
@@ -45,6 +46,7 @@ class StringConstraint implements Constraint
 
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 
@@ -55,6 +57,7 @@ class StringConstraint implements Constraint
 
             if ($validator->coerce){
                 $element = substr($element, 0, $schema->maxLength);
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 
@@ -65,6 +68,7 @@ class StringConstraint implements Constraint
 
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 
@@ -75,6 +79,7 @@ class StringConstraint implements Constraint
 
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 

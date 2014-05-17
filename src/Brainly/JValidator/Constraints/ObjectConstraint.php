@@ -35,6 +35,7 @@ class ObjectConstraint implements Constraint
         if (!is_object($element)) {
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             } else {
                 $errors[$myName][] = 'must be an object';

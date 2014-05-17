@@ -34,6 +34,7 @@ class IntegerConstraint implements Constraint
         if (!is_int($element)) {
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             } else {
                 $errors[$myName][] = 'must be an integer';
@@ -45,10 +46,7 @@ class IntegerConstraint implements Constraint
             if ($element < $schema->minimum) {
                 if ($validator->coerce && isset($schema->default)) {
                     $element = $schema->default;
-                    return $errors;
-                }
-                if ($validator->coerce) {
-                    $element = $schema->minimum;
+                    $validator->resultCode = Validator::MODIFIED;
                     return $errors;
                 }
                 $errors[$myName][] = 'must be greater than '.$schema->minimum;
@@ -59,10 +57,7 @@ class IntegerConstraint implements Constraint
             if ($element > $schema->maximum) {
                 if ($validator->coerce && isset($schema->default)) {
                     $element = $schema->default;
-                    return $errors;
-                }
-                if ($validator->coerce) {
-                    $element = $schema->maximum;
+                    $validator->resultCode = Validator::MODIFIED;
                     return $errors;
                 }
                 $errors[$myName][] = 'must be less than '.$schema->maximum;
@@ -73,6 +68,7 @@ class IntegerConstraint implements Constraint
 
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 

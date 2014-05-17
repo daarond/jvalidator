@@ -64,8 +64,12 @@ class Validator
         $this->resultCode = Validator::NOT_PERFORMED;
         $this->resultJson = new \stdClass;
 
-        $json = json_decode($json);
-        $schema = json_decode($schema);
+        if (!is_object($json)) {
+            $json = json_decode($json);
+        }
+        if (!is_object($schema)) {
+            $schema = json_decode($schema);
+        }
 
         if (is_null($schema)) {
             throw new InvalidSchemaException();
@@ -75,6 +79,7 @@ class Validator
             $this->addError('$', 'Is not a valid JSON');
             return;
         }
+
         $this->resultCode = Validator::VALID;
 
         $errors = $this->check($json, $schema, "$", array());

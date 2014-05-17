@@ -34,6 +34,7 @@ class NumberConstraint implements Constraint
         if (!is_numeric($element) || is_string($element)) {
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             } else {
                 $errors[$myName][] = 'must be a number';
@@ -46,12 +47,10 @@ class NumberConstraint implements Constraint
 
                 if ($validator->coerce && isset($schema->default)) {
                     $element = $schema->default;
+                    $validator->resultCode = Validator::MODIFIED;
                     return $errors;
                 }
-                if ($validator->coerce) {
-                    $element = $schema->minimum;
-                    return $errors;
-                }
+
                 $errors[$myName][] = 'must be greater than '.$schema->minimum;
             }
         }
@@ -60,10 +59,7 @@ class NumberConstraint implements Constraint
             if ($element > $schema->maximum) {
                 if ($validator->coerce && isset($schema->default)) {
                     $element = $schema->default;
-                    return $errors;
-                }
-                if ($validator->coerce) {
-                    $element = $schema->maximum;
+                    $validator->resultCode = Validator::MODIFIED;
                     return $errors;
                 }
                 $errors[$myName][] = 'must be less than '.$schema->maximum;
@@ -74,6 +70,7 @@ class NumberConstraint implements Constraint
 
             if ($validator->coerce && isset($schema->default)) {
                 $element = $schema->default;
+                $validator->resultCode = Validator::MODIFIED;
                 return $errors;
             }
 
